@@ -45,7 +45,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" href="{{ adminRoute('blogs.edit',['blog' => $blog->id]) }}">Edit</a>
-                                    <a class="btn btn-danger" href="">Delete</a>
+                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('blogs.destroy',['blog' => $blog->id]) }}" href="javascript:void(0)">Delete</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -65,4 +65,13 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script>
+        $(function(){
+            $('.delete').on('click',function(){
+                deleteData($(this).data('url'),"{{ adminRoute('blogs.index') }}")
+            })
+        })
+    </script>
 @endsection

@@ -62,6 +62,8 @@
     <script type="text/javascript" src="/richtexteditor/rte.js"></script>
     <script type="text/javascript" src='/richtexteditor/plugins/all_plugins.js'></script>
 
+    <link rel="stylesheet" href="/adassets/vendor/libs/sweetalert2/sweetalert2.css" />
+
     @yield('style')
 </head>
 
@@ -703,6 +705,9 @@
         return Promise.reject(error.message);
     });
 </script>
+<script src="/adassets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+
+
 
 <script src="/adassets/js/formSave.js"></script>
 

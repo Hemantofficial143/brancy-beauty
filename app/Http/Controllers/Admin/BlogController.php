@@ -101,7 +101,8 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->modelObject->remove($id);
+        return ['success' => true, 'message' => 'Blog deleted successfully.'];
     }
 
 }

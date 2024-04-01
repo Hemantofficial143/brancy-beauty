@@ -24,7 +24,7 @@
                             <tr>
                                 <td>
                                     @if(!empty($category->image_path))
-                                        <img width="150px" class="img-thumbnail img-fluid" src="{{$category->image_path}}" alt="{{$category->image_path}}">
+                                        <img width="50px" class="img-thumbnail img-fluid" src="{{$category->image_path}}" alt="{{$category->image_path}}">
                                     @else
                                         No Image
                                     @endif
@@ -41,7 +41,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" href="{{ adminRoute('categories.edit',['category' => $category->id]) }}">Edit</a>
-                                    <a class="btn btn-danger" href="">Delete</a>
+                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('categories.destroy',['category' => $category->id]) }}" href="javascript:void(0)">Delete</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -61,4 +61,13 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script>
+        $(function(){
+            $('.delete').on('click',function(){
+                deleteData($(this).data('url'),"{{ adminRoute('categories.index') }}")
+            })
+        })
+    </script>
 @endsection

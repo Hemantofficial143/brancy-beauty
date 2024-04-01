@@ -22,7 +22,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(!empty($promoCodes))
+
+                    @if(!empty($promoCodes->all()))
                         @foreach($promoCodes as $code)
                             <tr>
                                 <td>
@@ -52,7 +53,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    Delete
+                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('promo-codes.destroy',['promo_code' => $code->id]) }}" href="javascript:void(0)" >Delete</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -72,4 +73,13 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script>
+        $(function(){
+            $('.delete').on('click',function(){
+                deleteData($(this).data('url'),"{{ adminRoute('promo-codes.index') }}")
+            })
+        })
+    </script>
 @endsection
