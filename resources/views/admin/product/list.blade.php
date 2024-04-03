@@ -1,11 +1,13 @@
+@inject('baseHelper','App\Helpers\BaseHelper')
 @extends('admin.layout.auth')
 @section('content')
+
     <div class="container-xxl flex-grow-1 container-p-y">
-        @include('admin.includes.breadcrumb',['list' => [['title' => 'Blogs','route' => 'blogs.index']]])
+        @include('admin.includes.breadcrumb',['list' => [['title' => 'Products','route' => 'products.index']]])
         <div class="card">
             <div class="card-header border-bottom">
-                <h5 class="card-title mb-3">Blogs</h5>
-                <a class="float-end btn btn-primary" href="{{ adminRoute('blogs.create') }}">Add New</a>
+                <h5 class="card-title mb-3">Products</h5>
+                <a class="float-end btn btn-primary" href="{{ adminRoute('products.create') }}">Add New</a>
             </div>
 
             <div class="card-datatable table-responsive">
@@ -14,49 +16,45 @@
                     <tr>
                         <th>Image</th>
                         <th>Title</th>
-                        <th>Created At</th>
+                        <th>Category</th>
+                        <th>Price</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @if(!empty($blogs->all()))
-                        @foreach($blogs as $blog)
+                    @if(!empty($products->all()))
+                        @foreach($products as $product)
                             <tr>
                                 <td>
-                                    @if(!empty($blog->image_path))
-                                        <img width="150px" class="img-thumbnail img-fluid" src="{{$blog->image_path}}" alt="{{$blog->image_path}}">
-                                    @else
-                                        No Image
-                                    @endif
+                                    No Image
                                 </td>
                                 <td>
-                                    {{$blog->title}}
+                                    {{$product->title}}
                                 </td>
                                 <td>
-                                    {{$blog->created_at_formatted}}
-                                </td>
-                                <td>
-                                    @if($blog->status)
+                                    @if($product->status)
                                         <span class="badge bg-success">Active</span>
                                     @else
                                         <span class="badge bg-danger">Inactive</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ adminRoute('blogs.edit',['blog' => $blog->id]) }}">Edit</a>
-                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('blogs.destroy',['blog' => $blog->id]) }}" href="javascript:void(0)">Delete</a>
+                                    <a class="btn btn-primary" href="{{ adminRoute('categories.edit',['category' => $product->id]) }}">Edit</a>
+                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('categories.destroy',['category' => $product->id]) }}" href="javascript:void(0)">Delete</a>
                                 </td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5">No Blogs</td>
+                            <td colspan="5">No Products</td>
                         </tr>
                     @endif
                     <tr>
                         <td colspan="5">
-                            {{$blogs->links()}}
+                            {{$products->links()}}
                         </td>
                     </tr>
                     </tbody>
@@ -70,7 +68,7 @@
     <script>
         $(function(){
             $('.delete').on('click',function(){
-                deleteData($(this).data('url'),"{{ adminRoute('blogs.index') }}")
+                deleteData($(this).data('url'),"{{ adminRoute('products.index') }}")
             })
         })
     </script>

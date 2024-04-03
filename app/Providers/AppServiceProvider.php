@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Blog;
+use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,5 +26,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrapFive();
+
+        $blogsObj = new Blog();
+        $blogs = $blogsObj->list([]);
+        View::share('blogs',$blogs);
+
+        $categoriesObj = new Category();
+        $categories = $categoriesObj->list([]);
+        View::share('categories',$categories);
+
     }
 }

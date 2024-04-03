@@ -46,28 +46,11 @@
                 <div data-i18n="Dashboard">Dashboard</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <li class="menu-item {{ setActiveClass('products.index') }}">
+            <a href="{{adminRoute('products.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-brand-producthunt"></i>
                 <div data-i18n="Products">Products</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Product List">Product List</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Product Add">Product Add</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Category List">Category List</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="menu-item {{ setActiveClass('categories.index') }}">
             <a href="{{adminRoute('categories.index')}}" class="menu-link">

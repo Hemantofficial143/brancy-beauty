@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Storage;
 
-class FileHelper{
+class FileHelper extends BaseHelper {
 
 
     public function getFileURL($disk,$fileName)
