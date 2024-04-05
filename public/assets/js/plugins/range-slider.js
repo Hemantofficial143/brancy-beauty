@@ -14,15 +14,15 @@ $(document).ready(function() {
   });
   noUiSlider.create(rangeSlider, {
     start: [450, 2500],
-    step: 50,
+    step: 1,
     range: {
-      'min': [130],
-      'max': [2500]
+      'min': [parseInt($minAmount)],
+      'max': [parseInt($maxAmount)]
     },
     format: moneyFormat,
     connect: true
   });
-  
+
   // Set visual min and max values and also update value hidden form inputs
   rangeSlider.noUiSlider.on('update', function(values, handle) {
     document.getElementById('slider-range-value1').innerHTML = values[0];

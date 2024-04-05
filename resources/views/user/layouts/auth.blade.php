@@ -33,6 +33,8 @@
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="{{asset('assets/css/style.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/plugins/range-slider.css')}}">
+
 
 </head>
 
@@ -458,5 +460,7 @@
 <script src="{{asset('assets/js/plugins/swiper-bundle.min.js')}}"></script>
 <script src="{{asset('assets/js/plugins/fancybox.min.js')}}"></script>
 <script src="{{asset('assets/js/plugins/jquery.nice-select.min.js')}}"></script>
+
+@yield('script')
 </body>
 </html>

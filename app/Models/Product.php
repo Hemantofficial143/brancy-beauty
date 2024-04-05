@@ -36,6 +36,23 @@ class Product extends BaseModel
         return $records->all();
     }
 
+    public function minAmount($data)
+    {
+        $record = $this;
+        if(!empty($data['cat'])){
+            $record = $record->where('category_id',$data['cat']);
+        }
+        return $record->min('price');
+    }
+    public function maxAmount($data)
+    {
+        $record = $this;
+        if(!empty($data['cat'])){
+            $record = $record->where('category_id',$data['cat']);
+        }
+        return $record->max('price');
+    }
+
     public function saveRecord($data)
     {
         $product = new $this();

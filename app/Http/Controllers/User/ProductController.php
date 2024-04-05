@@ -14,10 +14,17 @@ class ProductController extends Controller
         $this->modelObject = new Product();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->modelObject->list(['with_pagination' => true,'per_page' => 9]);
-        return view('user.product.list',['products' => $products]);
+        $data = $request->all();
+        $data['with_pagination'] = true;
+        $data['per_page'] = 9;
+        $products = $this->modelObject->list($data);
+        $minMaxAmount = [
+            'min' => $this->modelObject->minAmount($data),
+            'max' => $this->modelObject->maxAmount($data)
+        ];
+        return view('user.product.list',['products' => $products,'amount' => $minMaxAmount]);
     }
 
     public function detail($slug)

@@ -30,7 +30,7 @@
                                     <div class="product-item product-st3-item">
                                         <div class="product-thumb">
                                             <a class="d-block" href="{{ route('product.detail',['slug' => $product->slug]) }}">
-                                                <img src="assets/images/shop/1.webp" width="370" height="450" alt="Image-HasTech">
+                                                <img src="{{isset($product->images[0]) ? $product->images[0]->image_path : ''}}" width="370" height="450" alt="Image-HasTech">
                                             </a>
 {{--                                            <span class="flag-new">new</span>--}}
                                             <div class="product-action">
@@ -96,21 +96,28 @@
                                 @endif
                             </ul>
                         </div>
-                        <div class="product-widget mb-0">
-                            <h4 class="product-widget-title">Popular Tags</h4>
-                            <ul class="product-widget-tags">
-                                <li><a href="blog.html">Beauty</a></li>
-                                <li><a href="blog.html">MakeupArtist</a></li>
-                                <li><a href="blog.html">Makeup</a></li>
-                                <li><a href="blog.html">Hair</a></li>
-                                <li><a href="blog.html">Nails</a></li>
-                                <li><a href="blog.html">Hairstyle</a></li>
-                                <li><a href="blog.html">Skincare</a></li>
-                            </ul>
-                        </div>
+{{--                        <div class="product-widget mb-0">--}}
+{{--                            <h4 class="product-widget-title">Popular Tags</h4>--}}
+{{--                            <ul class="product-widget-tags">--}}
+{{--                                <li><a href="blog.html">Beauty</a></li>--}}
+{{--                                <li><a href="blog.html">MakeupArtist</a></li>--}}
+{{--                                <li><a href="blog.html">Makeup</a></li>--}}
+{{--                                <li><a href="blog.html">Hair</a></li>--}}
+{{--                                <li><a href="blog.html">Nails</a></li>--}}
+{{--                                <li><a href="blog.html">Hairstyle</a></li>--}}
+{{--                                <li><a href="blog.html">Skincare</a></li>--}}
+{{--                            </ul>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
             </div>
         </div>
     </section>
+@endsection
+@section('script')
+    <script>
+        let $minAmount = "{{ $amount['min'] }}";
+        let $maxAmount = "{{ $amount['max'] }}";
+    </script>
+    <script src="{{asset('assets/js/plugins/range-slider.js')}}"></script>
 @endsection
