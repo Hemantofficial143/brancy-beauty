@@ -22,11 +22,12 @@ class BlogController extends Controller
 
     public function detail($slug)
     {
-        $product = $this->modelObject->getProductBySlug($slug);
-        if(!$product){
-            return 'Invalid Product';
+
+        $blog = $this->modelObject->getBlogBySlug($slug);
+        if(!$blog){
+            return 'Invalid Blog URL';
         }
-        return view('user.blog.detail',['product' => $product]);
+        return view('user.blog.detail',['blog' => $blog]);
 
     }
 }

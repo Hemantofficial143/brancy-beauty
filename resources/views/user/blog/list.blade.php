@@ -4,8 +4,8 @@
     <nav aria-label="breadcrumb" class="breadcrumb-style1 mb-10">
         <div class="container">
             <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active" >Blogs</li>
             </ol>
         </div>
     </nav>
@@ -22,7 +22,7 @@
                                 <div class="col-sm-4 col-lg-3 col-xl-4 mb-8">
                                     <!--== Start Blog Item ==-->
                                     <div class="post-item">
-                                        <a href="blog-details.html" class="thumb">
+                                        <a href="{{ route('blog.detail',['slug' => $blog->slug]) }}" class="thumb">
                                             <img src="{{$blog->image_path}}" width="370" height="320" alt="Image-HasTech">
                                         </a>
                                         <div class="content">
@@ -31,7 +31,7 @@
                                                     <a class="post-category mt-1">{{$tag}}</a>
                                                 @endforeach
                                             @endif
-                                            <h4 class="title"><a href="blog-details.html">{{$blog->title}}.</a></h4>
+                                            <h4 class="title"><a href="{{ route('blog.detail',['slug' => $blog->slug]) }}">{{$blog->title}}.</a></h4>
                                             <ul class="meta">
 {{--                                                <li class="author-info"><span>By:</span> <a href="blog.html">Tomas De Momen</a></li>--}}
                                                 <li class="post-date">February 13, 2021</li>

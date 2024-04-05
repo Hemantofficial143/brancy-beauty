@@ -97,4 +97,9 @@ class Blog extends BaseModel
         return $blog;
     }
 
+    public function getBlogBySlug($slug)
+    {
+        return $this->where('slug',$slug)->first();
+    }
+
 }

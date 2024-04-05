@@ -87,15 +87,13 @@
                             </div>
                         </div>
                         <div class="product-widget">
-                            <h4 class="product-widget-title">Categoris</h4>
+                            <h4 class="product-widget-title">Categories</h4>
                             <ul class="product-widget-category">
-                                <li><a href="product.html">Accesasories <span>(5)</span></a></li>
-                                <li><a href="product.html">Computer <span>(4)</span></a></li>
-                                <li><a href="product.html">Covid-19 <span>(2)</span></a></li>
-                                <li><a href="product.html">Electronics <span>(6)</span></a></li>
-                                <li><a href="product.html">Frame Sunglasses <span>(12)</span></a></li>
-                                <li><a href="product.html">Furniture <span>(7)</span></a></li>
-                                <li><a href="product.html">Genuine Leather <span>(9)</span></a></li>
+                                @if(!empty($categories))
+                                    @foreach($categories as $category)
+                                        <li><a data-url="{{ route('product.list',['cat' => $category['id']]) }}" href="{{ route('product.list',['cat' => $category['id']]) }}">{{$category['name']}} <span>(5)</span></a></li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                         <div class="product-widget mb-0">
