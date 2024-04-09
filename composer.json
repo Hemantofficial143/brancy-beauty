@@ -9,6 +9,7 @@
         "binary-cats/laravel-sku": "^0.7.0",
         "guzzlehttp/guzzle": "^7.2",
         "irfanchowdhury/unique-slug-generate": "^0.1.4",
+        "jackiedo/cart": "^3.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8"

@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 function setActiveClass($route,$regex = true){
     $currentRouteName = \Request::route()->getName();
     $first = explode('.',$route);

@@ -13,7 +13,7 @@ $(document).ready(function() {
     prefix: '$'
   });
   noUiSlider.create(rangeSlider, {
-    start: [450, 2500],
+    start: [$selectedMin, $selectedMax],
     step: 1,
     range: {
       'min': [parseInt($minAmount)],

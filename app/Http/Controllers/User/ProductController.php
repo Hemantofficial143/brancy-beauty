@@ -12,12 +12,32 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $products = new Product();
+        if (!empty($data['q'])) {
+            $products = $products->where('title', 'like', "%" . $data['q'] . "%");
+        }
+
+        if (!empty($data['min']) && !empty($data['max'])) {
+            $products = $products->where('price', '>=', $data['min'])->where('price', '<=', $data['max']);
+        }
+
+        if (!empty($data['cat'])) {
+            $products = $products->where('category_id', '=', $data['cat']);
+            $countClone = clone $products;
+        }
+
         $products = $products->paginate(9);
+
         $minMaxAmount = [
-            'min' => 1,
-            'max' => 1000
+            'min' => !empty($data['cat']) ? Product::where('category_id',$data['cat'])->min('price') : Product::min('price'),
+            'max' => !empty($data['cat']) ? Product::where('category_id', $data['cat'])->max('price') : Product::max('price')
         ];
-        return view('user.product.list', ['products' => $products, 'amount' => $minMaxAmount]);
+        $selectedMinMax = [
+            'min' => !empty($data['min']) && !empty($data['max']) ? $data['min'] : $minMaxAmount['min'],
+            'max' => !empty($data['min']) && !empty($data['max']) ? $data['max'] : $minMaxAmount['max']
+        ];
+
+
+        return view('user.product.list', ['products' => $products, 'amount' => $minMaxAmount, 'selectedMinMax' => $selectedMinMax]);
     }
 
     public function detail($slug)

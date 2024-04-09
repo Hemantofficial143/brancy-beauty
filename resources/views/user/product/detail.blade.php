@@ -8,14 +8,11 @@
                     <div class="page-header-st3-content text-center text-md-start">
                         <ol class="breadcrumb justify-content-center justify-content-md-start">
                             <li class="breadcrumb-item"><a class="text-dark" href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active text-dark" aria-current="page">Product Detail</li>
+                            <li class="breadcrumb-item" aria-current="page"><a href="{{ route('product.list') }}">Products</a></li>
+                            <li class="breadcrumb-item active text-dark" aria-current="page">{{$product->title}}</li>
                         </ol>
-                        <h2 class="page-header-title">Product Detail</h2>
+                        <h2 class="page-header-title">{{$product->title}}</h2>
                     </div>
-                </div>
-                <div class="col-md-7">
-                    <h5 class="showing-pagination-results mt-5 mt-md-9 text-center text-md-end">Showing Single
-                        Product</h5>
                 </div>
             </div>
         </div>
@@ -31,6 +28,8 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
+                    <form method="post" action="{{route('cart.add')}}">
+                        @csrf
                     <div class="product-details-content">
                         <h5 class="product-details-collection">{{$product->category->name}}</h5>
                         <h3 class="product-details-title">{{$product->title}}</h3>
@@ -44,9 +43,10 @@
                             </div>
                             <button type="button" class="product-review-show">150 reviews</button>
                         </div>
+                        <input type="hidden" name="product_id" id="product_id"  value="{{ $product->id }}">
                         <div class="product-details-pro-qty">
                             <div class="pro-qty">
-                                <input type="text" title="Quantity" value="01">
+                                <input type="text" name="qty" title="Quantity" value="1">
                             </div>
                         </div>
                         <div class="product-details-action">
@@ -58,14 +58,15 @@
                             @endif
 
                             <div class="product-details-cart-wishlist">
-                                <button type="button" class="btn-wishlist" data-bs-toggle="modal"
-                                        data-bs-target="#action-WishlistModal"><i class="fa fa-heart-o"></i></button>
-                                <button type="button" class="btn" data-bs-toggle="modal"
-                                        data-bs-target="#action-CartAddModal">Add to cart
+{{--                                <button type="button" class="btn-wishlist" data-bs-toggle="modal"--}}
+{{--                                        data-bs-target="#action-WishlistModal"><i class="fa fa-heart-o"></i></button>--}}
+                                <button type="submit" class="btn"
+                                        >Add to cart
                                 </button>
                             </div>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
             <div class="row">
@@ -166,4 +167,27 @@
             </div>
         </div>
     </section>
+@endsection
+@section('script')
+    <script>
+        var proQty = $(".pro-qty");
+        proQty.append('<div class= "dec qty-btn">-</div>');
+        proQty.append('<div class="inc qty-btn">+</div>');
+        $('.qty-btn').on('click', function (e) {
+            e.preventDefault();
+            var $button = $(this);
+            var oldValue = $button.parent().find('input').val();
+            if ($button.hasClass('inc')) {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 1;
+                }
+            }
+            $button.parent().find('input').val(newVal);
+        });
+    </script>
 @endsection

@@ -24,4 +24,6 @@ Route::get('products/{slug}',[\App\Http\Controllers\User\ProductController::clas
 Route::get('blogs',[\App\Http\Controllers\User\BlogController::class,'index'])->name('blog.list');
 Route::get('blogs/{slug}',[\App\Http\Controllers\User\BlogController::class,'detail'])->name('blog.detail');
 
+Route::post('cart-add',[\App\Http\Controllers\User\CartController::class,'add'])->name('cart.add');
+
 
