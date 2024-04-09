@@ -24,16 +24,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         Schema::defaultStringLength(191);
         Paginator::useBootstrapFive();
 
-        $blogsObj = new Blog();
-        $blogs = $blogsObj->list([]);
-        View::share('blogs',$blogs);
+        $blogs = [];
+        if (Schema::hasTable((new Blog())->getTable())) {
+            $blogsObj = new Blog();
+            $blogs = $blogsObj->all();
+        }
+        View::share('blogs', $blogs);
 
-        $categoriesObj = new Category();
-        $categories = $categoriesObj->list([]);
-        View::share('categories',$categories);
-
+        $categories = [];
+        if (Schema::hasTable((new Category())->getTable())) {
+            $categoriesObj = new Category();
+            $categories = $categoriesObj->all();
+        }
+        View::share('categories', $categories);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -9,20 +10,14 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->modelObject = new Category();
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $categories = $this->modelObject->list($data);
-
+        $categories = new Category();
+        $categories = $categories->paginate(10);
         return view('admin.category.list', ['categories' => $categories]);
     }
 
@@ -51,7 +46,18 @@ class CategoryController extends Controller
         $request->validate($rules, [
             'image.mimes' => 'Image must be in jpg, jpeg or png format.'
         ]);
-        $category = $this->modelObject->saveRecord($data);
+
+        $category = new Category();
+        $category->name = $data['name'];
+        if (!empty($data['image'])) {
+            $fileHelperObj = new FileHelper();
+            $category->image = $fileHelperObj->uploadFile('categories', $data['image']);
+        }
+
+        $category->status = isTrue($data['status']);
+        $category->save();
+
+
         return ['success' => true, 'data' => $category, 'message' => 'Category created successfully.'];
     }
 
@@ -68,7 +74,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = $this->modelObject->load($id);
+        $category = Category::find($id);
         return view('admin.category.create',['category' => $category]);
     }
 
@@ -86,7 +92,28 @@ class CategoryController extends Controller
         }
         $request->validate($rules);
 
-        $category = $this->modelObject->updateRecord($id, $data);
+
+        $category = Category::find($id);
+        $category->name = $data['name'];
+
+
+        if (!empty($data['delete_image'])) {
+            $fileHelperObj = new FileHelper();
+            $fileHelperObj->deleteFile('categories', $category->image);
+            $category->image = null;
+        }
+
+        if (!empty($data['image'])) {
+            $fileHelperObj = new FileHelper();
+            $fileHelperObj->deleteFile('categories', $category->image);
+            $category->image = $fileHelperObj->uploadFile('categories', $data['image']);
+        }
+
+
+        $category->status = isTrue($data['status']);
+        $category->save();
+
+
         return ['success' => true, 'data' => $category, 'message' => 'Category updated successfully.'];
     }
 
@@ -95,7 +122,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->modelObject->remove($id);
+        Category::find($id)->delete();
         return ['success' => true, 'message' => 'Category deleted successfully.'];
 
     }

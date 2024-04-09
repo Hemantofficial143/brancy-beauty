@@ -4,23 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactUs;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ContactUsController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->modelObject = new ContactUs();
-    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $inquiries = $this->modelObject->list($data);
+        $inquiries = new ContactUs();
+        $inquiries = $inquiries->paginate(10);
 
         return view('admin.contact.list',['inquiries' => $inquiries]);
     }

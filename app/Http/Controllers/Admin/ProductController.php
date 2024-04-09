@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Irfan\LaravelUniqueSlug\Facades\UniqueSlug;
 
 class ProductController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->modelObject = new Product();
-    }
 
     /**
      * Display a listing of the resource.
@@ -21,9 +20,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $products = $this->modelObject->list($data);
-
+        $products = new Product();
+        $products = $products->paginate(10);
         return view('admin.product.list', ['products' => $products]);
     }
 
@@ -50,8 +48,28 @@ class ProductController extends Controller
             'category' => ['required'],
         ]);
 
-        $product = $this->modelObject->saveRecord($data);
 
+        $product = new Product();
+        $product->title = $data['title'];
+        $product->slug = UniqueSlug::generate(new Product(), $product->title, 'slug');
+        $product->description = $data['description'];
+        $product->mrp = $data['mrp'];
+        $product->price = $data['price'];
+        $product->status = $data['status'] == 'ACTIVE' ? true : false;
+        $product->category_id = $data['category'];
+        $product->tags = !empty($data['tags']) ? $data['tags'] : null;
+        $product->save();
+
+        if (!empty($data['images']) && is_array($data['images'])) {
+            $fileUploadObj = new FileHelper();
+            foreach ($data['images'] as $oneImage) {
+                $file = $oneImage;
+                $productImage = new ProductImage();
+                $productImage->product_id = $product->id;
+                $productImage->image = $fileUploadObj->uploadFile('products', $file);
+                $productImage->save();
+            }
+        }
         return ['success' => true, 'data' => $product, 'message' => 'Product created successfully.'];
     }
 

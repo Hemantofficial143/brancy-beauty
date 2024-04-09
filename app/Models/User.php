@@ -53,16 +53,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function list($data)
-    {
-        $records = $this;
-        if(!empty($data['with_pagination'])){
-            return $records->paginate(10);
-        }
-        return $records->all();
-    }
-
     public function getCreatedAtFormattedAttribute()
     {
         return Carbon::parse($this->created_at)->format('Y-m-d H:i A');

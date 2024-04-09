@@ -24,16 +24,5 @@ class BaseModel extends Model
         return Carbon::parse($this->created_at)->format('Y-m-d H:i A');
     }
 
-    public function remove($id, $forceDelete = false)
-    {
-        $record = $this->find($id);
-        if ($forceDelete) {
-            $record->forceDelete();
-        } else {
-            $record->delete();
-        }
-
-    }
-
 
 }

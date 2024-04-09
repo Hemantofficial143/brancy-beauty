@@ -8,10 +8,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->modelObject = new User();
-    }
 
     /**
      * Display a listing of the resource.
@@ -19,8 +15,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $users = $this->modelObject->list($data);
+        $users = new User();
+        $users = $users->paginate(10);
         return view('admin.user.list',['users' => $users]);
     }
 

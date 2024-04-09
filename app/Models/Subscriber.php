@@ -10,19 +10,4 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Subscriber extends BaseModel
 {
     use SoftDeletes;
-
-    public function list($data)
-    {
-        $records = $this;
-
-        if(!empty($data['with_trashed'])){
-            $records = $records->withTrashed();
-        }
-
-        if(!empty($data['with_pagination'])){
-            return $records->paginate(10);
-        }
-        return $records->all();
-    }
-
 }

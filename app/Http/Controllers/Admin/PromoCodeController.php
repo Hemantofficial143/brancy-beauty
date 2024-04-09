@@ -9,19 +9,14 @@ use Illuminate\Http\Request;
 class PromoCodeController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->modelObject = new PromoCode();
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $promoCodes = $this->modelObject->list($data);
+        $promoCodes = new PromoCode();
+        $promoCodes = $promoCodes->paginate(10);
 
         return view('admin.coupon.list',['promoCodes' => $promoCodes]);
     }
@@ -48,7 +43,17 @@ class PromoCodeController extends Controller
             'code.unique' => 'Coupon code already used.',
         ]);
 
-        $promocode = $this->modelObject->saveRecord($data);
+
+        $promocode = new PromoCode();
+        $promocode->code = $data['code'];
+        $promocode->type = $data['type'];
+        $promocode->value = $data['value'];
+        if(!empty($data['min_order_value'])){
+            $promocode->min_order_value = $data['min_order_value'];
+        }
+        $promocode->save();
+
+
         return ['success' => true, 'data' => $promocode,'message' => 'promo code created successfully.'];
     }
 
@@ -81,7 +86,8 @@ class PromoCodeController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->modelObject->remove($id);
+
+        PromoCode::find($id)->delete();
         return ['success' => true, 'message' => 'Promo code deleted successfully.'];
     }
 }

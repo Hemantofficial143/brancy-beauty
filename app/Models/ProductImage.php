@@ -20,17 +20,5 @@ class ProductImage extends BaseModel
         return $fileUploadObj->getFileURL('products',$this->image);
     }
 
-    public function saveImage($data)
-    {
-        $fileUploadObj = new FileHelper();
-        $file = $data['file'];
-
-        $productImage = new $this();
-        $productImage->product_id = $data['product_id'];
-        $productImage->image = $fileUploadObj->uploadFile('products',$file);
-        $productImage->save();
-        return $productImage;
-
-    }
 
 }

@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->modelObject = new Blog();
-    }
 
     /**
      * Display a listing of the resource.
@@ -20,9 +17,9 @@ class BlogController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $blogs = $this->modelObject->list($data);
-        return view('admin.blog.list',['blogs' => $blogs]);
+        $blogs = new Blog();
+        $blogs = $blogs->paginate(10);
+        return view('admin.blog.list', ['blogs' => $blogs]);
     }
 
     /**
@@ -32,7 +29,7 @@ class BlogController extends Controller
     {
         $blog = null;
 
-        return view('admin.blog.create',['blog' => $blog]);
+        return view('admin.blog.create', ['blog' => $blog]);
     }
 
     /**
@@ -41,39 +38,36 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $rules = [
             'title' => ['required'],
             'description' => ['required'],
         ];
-
-        if(!empty($data['image'])){
+        if (!empty($data['image'])) {
             $rules['image'] = ['mimes:jpg,png,jpeg,webp'];
         }
-
-        $request->validate($rules,[
+        $request->validate($rules, [
             'image.mimes' => 'Image must be in jpg, jpeg or png format.'
         ]);
+        $blog = new Blog();
+        $blog->title = $data['title'];
+        $blog->description = $data['description'];
+        $blog->tags = !empty($data['tags']) ? $data['tags'] : null;
+        $blog->slug = Str::slug($data['title']);
+        if (!empty($data['image'])) {
+            $fileHelperObj = new FileHelper();
+            $blog->image = $fileHelperObj->uploadFile('blogs', $data['image']);
+        }
+        $blog->status = isTrue($data['status']);
+        $blog->save();
 
-        $blog = $this->modelObject->saveRecord($data);
-        return ['success' => true, 'data' => $blog,'message' => 'Blog created successfully.'];
+        return ['success' => true, 'data' => $blog, 'message' => 'Blog created successfully.'];
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $blog = $this->modelObject->load($id);
-        return view('admin.blog.create',['blog' => $blog]);
+        $blog = Blog::find($id);
+        return view('admin.blog.create', ['blog' => $blog]);
     }
 
     /**
@@ -87,13 +81,30 @@ class BlogController extends Controller
             'description' => ['required'],
         ];
 
-        if(!empty($data['image'])){
+        if (!empty($data['image'])) {
             $rules['image'] = ['mimes:jpg,png,jpeg,webp'];
         }
         $request->validate($rules);
 
-        $blog = $this->modelObject->updateRecord($id,$data);
-        return ['success' => true, 'data' => $blog,'message' => 'Blog updated successfully.'];
+        $blog = Blog::find($id);
+
+        $blog->title = $data['title'];
+        $blog->description = $data['description'];
+        $blog->tags = !empty($data['tags']) ? $data['tags'] : null;
+
+        if (!empty($data['delete_image'])) {
+            $fileHelperObj = new FileHelper();
+            $fileHelperObj->deleteFile('blogs', $blog->image);
+            $blog->image = null;
+        }
+        if (!empty($data['image'])) {
+            $fileHelperObj = new FileHelper();
+            $fileHelperObj->deleteFile('blogs', $blog->image);
+            $blog->image = $fileHelperObj->uploadFile('blogs', $data['image']);
+        }
+        $blog->status = isTrue($data['status']);
+        $blog->save();
+        return ['success' => true, 'data' => $blog, 'message' => 'Blog updated successfully.'];
     }
 
     /**
@@ -101,7 +112,7 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->modelObject->remove($id);
+        Blog::find($id)->delete();
         return ['success' => true, 'message' => 'Blog deleted successfully.'];
     }
 

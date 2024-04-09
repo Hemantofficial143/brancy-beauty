@@ -9,21 +9,14 @@ use Illuminate\Http\Request;
 class SubscriberController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->modelObject = new Subscriber();
-    }
-
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $data['with_trashed'] = true;
-        $subscribers = $this->modelObject->list($data);
+        $subscribers = new Subscriber();
+        $subscribers = $subscribers->paginate(10);
         return view('admin.subscriber.list',['subscribers' => $subscribers]);
     }
 

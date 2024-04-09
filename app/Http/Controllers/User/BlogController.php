@@ -8,22 +8,18 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function __construct()
-    {
-        $this->modelObject = new Blog();
-    }
 
     public function index()
     {
-        $blogs = $this->modelObject->list(['with_pagination' => true,'per_page' => 9]);
-
+        $blogs = new Blog();
+        $blogs = $blogs->paginate(9);
         return view('user.blog.list',['blogs' => $blogs]);
     }
 
     public function detail($slug)
     {
 
-        $blog = $this->modelObject->getBlogBySlug($slug);
+        $blog = Blog::where('slug',$slug)->first();
         if(!$blog){
             return 'Invalid Blog URL';
         }

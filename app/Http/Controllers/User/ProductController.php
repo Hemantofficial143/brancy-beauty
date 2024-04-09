@@ -8,32 +8,25 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->modelObject = new Product();
-    }
-
     public function index(Request $request)
     {
         $data = $request->all();
-        $data['with_pagination'] = true;
-        $data['per_page'] = 9;
-        $products = $this->modelObject->list($data);
+        $products = new Product();
+        $products = $products->paginate(9);
         $minMaxAmount = [
-            'min' => $this->modelObject->minAmount($data),
-            'max' => $this->modelObject->maxAmount($data)
+            'min' => 1,
+            'max' => 1000
         ];
-        return view('user.product.list',['products' => $products,'amount' => $minMaxAmount]);
+        return view('user.product.list', ['products' => $products, 'amount' => $minMaxAmount]);
     }
 
     public function detail($slug)
     {
-        $product = $this->modelObject->getProductBySlug($slug);
-        if(!$product){
+        $product = Product::where('slug', $slug)->first();
+        if (!$product) {
             return 'Invalid Product';
         }
-        return view('user.product.detail',['product' => $product]);
+        return view('user.product.detail', ['product' => $product]);
 
     }
 
