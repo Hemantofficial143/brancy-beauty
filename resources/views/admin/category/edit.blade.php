@@ -33,13 +33,15 @@
                                         id="name"
                                         placeholder="Enter category name"
                                         name="name"
+                                        value="{{$category->name}}"
                                         aria-label="Enter category name">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Status</label><Br>
                                     <label class="switch switch-square switch-lg">
                                         <input type="checkbox" class="switch-input"
-                                                name="status" id="status">
+                                               {{$category->status ? 'checked'  : ''}}
+                                               name="status" id="status">
                                         <span class="switch-toggle-slider" style="width: 100px;">
                                           <span class="switch-on">
                                             Active
@@ -68,7 +70,9 @@
     <script>
         $(function () {
             let formData = new FormData()
-            let storeUrl = "{{adminRoute('categories.store')}}";
+            let storeUrl = "{{adminRoute('categories.update',['category' => $category->id])}}";
+            formData.append('_method', 'put')
+
             let categoryFormObj = $('#categoryForm');
 
             $('.category-image').filepond({
@@ -89,12 +93,21 @@
                 }
             });
 
+            @if(!empty($category->image_path))
+            $('.category-image')
+                .filepond('addFile', "{{$category->image_path}}")
+                .then(function (file) {
+                    console.log('file added', file);
+                });
+            @endif
+
             categoryFormObj.on('submit', function (e) {
                 e.preventDefault()
                 formData.append('name', $('#name').val())
                 formData.append('status', $('#status').prop('checked'))
                 saveForm(storeUrl, formData, "{{ adminRoute('categories.index') }}");
             })
+
         })
     </script>
 @endsection

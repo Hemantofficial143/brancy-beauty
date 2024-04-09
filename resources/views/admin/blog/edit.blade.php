@@ -33,7 +33,7 @@
                                         id="title"
                                         placeholder="Enter title"
                                         name="title"
-
+                                        value="{{$blog->title}}"
                                         aria-label="Enter title">
                                 </div>
                                 <div class="mb-3">
@@ -57,7 +57,7 @@
                                     <label class="form-label">Status</label><Br>
                                     <label class="switch switch-square switch-lg">
                                         <input type="checkbox" class="switch-input"
-                                               name="status" id="status">
+                                               {{$blog->status ? 'checked'  : ''}} name="status" id="status">
                                         <span class="switch-toggle-slider" style="width: 100px;">
                                           <span class="switch-on">
                                             Active
@@ -86,11 +86,11 @@
     <script>
         $(function () {
             let formData = new FormData()
-            let storeUrl = "{{adminRoute('blogs.store')}}";
-
+            formData.append('_method', 'put')
+            let storeUrl = "{{adminRoute('blogs.update',['blog' => $blog->id])}}";
 
             let blogFormObj = $('#blogForm');
-
+            let blog = @json($blog);
 
             $('.blog-image').filepond({
                 allowMultiple: true,
@@ -111,23 +111,32 @@
             });
 
 
-            let
-                tags = []
+            @if(!empty($blog->image_path))
+            $('.blog-image')
+                .filepond('addFile', "{{$blog->image_path}}")
+                .then(function (file) {
+                    console.log('file added', file);
+                });
+            @endif
+
+
+
+            let tags = []
             var description = new RichTextEditor("#description");
 
-            if (blog != null) {
-                description.setHTMLCode(blog.description);
-                tags = blog.tags.split(',')
 
-                if (tags.length > 0) {
-                    tags.forEach(tag => {
-                        let spanText = tag
-                        var button = $('<span class="badge tagBadge bg-label-primary cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Click to remove" style="margin-right: 10px;margin-bottom: 5px"></span>');
-                        button.text(spanText.toLowerCase());
-                        $(button).insertBefore('#tagsdiv input');
-                    })
-                }
+            description.setHTMLCode(blog.description);
+            tags = blog.tags.split(',')
+
+            if (tags.length > 0) {
+                tags.forEach(tag => {
+                    let spanText = tag
+                    var button = $('<span class="badge tagBadge bg-label-primary cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Click to remove" style="margin-right: 10px;margin-bottom: 5px"></span>');
+                    button.text(spanText.toLowerCase());
+                    $(button).insertBefore('#tagsdiv input');
+                })
             }
+
 
             $("#tagsdiv input").on({
                 focusout() {

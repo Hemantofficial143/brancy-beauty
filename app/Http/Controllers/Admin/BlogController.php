@@ -27,9 +27,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $blog = null;
-
-        return view('admin.blog.create', ['blog' => $blog]);
+        return view('admin.blog.create');
     }
 
     /**
@@ -67,7 +65,7 @@ class BlogController extends Controller
     public function edit(string $id)
     {
         $blog = Blog::find($id);
-        return view('admin.blog.create', ['blog' => $blog]);
+        return view('admin.blog.edit', ['blog' => $blog]);
     }
 
     /**

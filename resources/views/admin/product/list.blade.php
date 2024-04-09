@@ -40,8 +40,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ adminRoute('categories.edit',['category' => $product->id]) }}">Edit</a>
-                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('categories.destroy',['category' => $product->id]) }}" href="javascript:void(0)">Delete</a>
+                                    <a class="btn btn-primary" href="{{ adminRoute('products.edit',['product' => $product->id]) }}">Edit</a>
+                                    <a class="btn btn-danger delete" data-url="{{ adminRoute('products.destroy',['product' => $product->id]) }}" href="javascript:void(0)">Delete</a>
                                 </td>
                                 <td></td>
                                 <td></td>
