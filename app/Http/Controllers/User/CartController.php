@@ -10,6 +10,12 @@ use Jackiedo\Cart\Facades\Cart;
 class CartController extends Controller
 {
 
+
+    public function index()
+    {
+        return view('user.cart');
+    }
+
     public function add(Request $request)
     {
 
@@ -20,8 +26,6 @@ class CartController extends Controller
             'qty' => $request->qty,
             'price' => $product->price
         ]);
-        dd(Cart::name('shopping')->getItems());
-
-
+        return "Added To Cart";
     }
 }
